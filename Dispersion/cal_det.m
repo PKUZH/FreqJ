@@ -1,3 +1,8 @@
+%{
+calculate secular functions of given f&c
+z_l (m), alpha(m/s), beta(m/s), mu are n*1 matrix, n is the number of layers
+%}
+
 function dets = cal_det(f,c,z_l,alpha,beta,mu)
     w = 2*pi*f;
     l_num = size(alpha,1);
@@ -5,7 +10,7 @@ function dets = cal_det(f,c,z_l,alpha,beta,mu)
     gamma = sqrt(k^2-(w./alpha).^2);
     vu = sqrt(k^2-(w./beta).^2);
     x = k^2+vu.^2;
-    %define E Matrix
+    % define E Matrix
     E11 = zeros(l_num,2,2);
     E12 = zeros(l_num,2,2);
     E21 = zeros(l_num,2,2);
@@ -16,7 +21,7 @@ function dets = cal_det(f,c,z_l,alpha,beta,mu)
         E21(j,:,:) = [-2*alpha(j)*mu(j)*k*gamma(j) -beta(j)*mu(j)*x(j);-alpha(j)*mu(j)*x(j) -2*beta(j)*mu(j)*k*vu(j)]/w;
         E22(j,:,:) = [2*alpha(j)*mu(j)*k*gamma(j) beta(j)*mu(j)*x(j);-alpha(j)*mu(j)*x(j) -2*beta(j)*mu(j)*k*vu(j)]/w;
     end
-    %define R/T 
+    % define R/T 
     T_d = zeros(l_num-1,2,2);
     R_du = zeros(l_num-1,2,2);
     T_u = zeros(l_num-2,2,2);
@@ -57,7 +62,7 @@ function dets = cal_det(f,c,z_l,alpha,beta,mu)
         T_d(j,:,:) = M(1:2,1:2);
         R_du(j,:,:) = M(3:4,1:2);
     end
-    %define generalized R/T
+    % define generalized R/T
     T_d_new = zeros(l_num-1,2,2);
     R_du_new = zeros(l_num-1,2,2);
     T_u_new = zeros(l_num-2,2,2);
@@ -90,17 +95,19 @@ function dets = cal_det(f,c,z_l,alpha,beta,mu)
         R_du_new(j,:,:) = R_du_new_0;
     end
     dets = zeros(l_num,1);
+    % secular function of j-th layer
     for j = 1:l_num-1
         R_ud_new_0 = reshape(R_ud_new(j,:,:),2,2);
         R_du_new_0 = reshape(R_du_new(j,:,:),2,2);
-        dets(j) = det(eye(2)-R_ud_new_0*R_du_new_0);
+        dets(j) = abs(det(eye(2)-R_ud_new_0*R_du_new_0));
     end
     E21_0 = reshape(E21(1,:,:),2,2);
     E22_0 = reshape(E22(1,:,:),2,2);
     R_du_new_0 = reshape(R_du_new(1,:,:),2,2);
     [~,Lambda_u] = cal_Lambda(0,z_l,vu,gamma,l_num);
     Lambda_u_0 = reshape(Lambda_u(1,:,:),2,2);
-    dets(l_num) = det(E21_0-E22_0*Lambda_u_0*R_du_new_0);
+    % secular function of free surface
+    dets(l_num) = abs(det(E21_0-E22_0*Lambda_u_0*R_du_new_0));
 end
 
 function [Lambda_d,Lambda_u] = cal_Lambda(z,z_l,vu,gamma,l_num)

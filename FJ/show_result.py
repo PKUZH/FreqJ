@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 a = np.loadtxt("/home/zhangh/MyProject/FreqJ/FJ/result0.mat", delimiter=",")
 
-c_min, c_max = 100, 600
+c_min, c_max = 150, 600
 delta, npts = 0.0125, 2048
 f_min, f_max = 1/(npts*delta), 25
 extent = [f_min, f_max, c_min, c_max]
