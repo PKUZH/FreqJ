@@ -49,8 +49,7 @@ def read_sac(gf_index):
         return read('fz.tz_0'+str(gf_index)+'.SAC')
 
 
-path = os.path.abspath('..')
-gf_path = path+'/GFs/model_shallow/gzz'
+gf_path = '/home/zhangh/Data/GFs/model_shallow/gzz'
 os.chdir(gf_path)
 
 gf_num, delta, npts = 500, 0.01, 800
