@@ -18,8 +18,10 @@ def norm(data):
             data[i] = 0
     return data
 '''
+
+
 # function B is the integral of J0
-def b_int(r1,r2):
+def b_int(r1, r2):
     j_0 = lambda x: jn(0, x)
     b_result = quad(j_0, r1, r2)
     return b_result[0]
@@ -30,12 +32,12 @@ def calculate_i(w, c, g_rw, r):
     r_size = len(r)
     d_r = r[1]-r[0]
     k = w/c
-    i_result = (jn(0,k*r[0])-b_int(0,k*r[0])/(k*r[0]))*g_rw[0]/k**2
+    i_result = (jn(0, k*r[0])-b_int(0, k*r[0])/(k*r[0]))*g_rw[0]/k**2
     for i in range(r_size-1):
         rl = r[i]
         ru = r[i+1]
         b = (g_rw[i+1]-g_rw[i])/d_r
-        i_result += b*(ru*jn(0, k*ru)-rl*jn(0, k*rl))/k**2-b*b_int(k*rl,k*ru)/k**3
+        i_result += b*(ru*jn(0, k*ru)-rl*jn(0, k*rl))/k**2-b*b_int(k*rl, k*ru)/k**3
     i_result += g_rw[-1]*r[-1]*jn(1, k*r[-1])/k
     return i_result
 
@@ -71,7 +73,6 @@ for i in range(gf_num):
 #    data = norm(data)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]
-
 
 
 def func(params):
