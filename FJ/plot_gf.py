@@ -1,6 +1,15 @@
 from obspy.core import *
 import matplotlib.pyplot as plt
 import os
+def norm(data):
+    for i in range(len(data)):
+        if data[i]>0:
+            data[i] = 1
+        elif data[i]<0:
+            data[i] = -1
+        else:
+            data[i] = 0
+    return data
 
 path = os.path.abspath('..')
 gf_path = path+'/GFs/model2'
@@ -10,7 +19,7 @@ npts = 4000
 delta = 0.0125
 t_scale = [i*delta for i in list(range(npts))]
 p1 = plt.subplot(111)
-for i in range(500):
+for i in range(110,121):
     d = i+1
     if d < 10:
         st = read('fz.tz_000'+str(d)+'.SAC')
@@ -22,6 +31,7 @@ for i in range(500):
     # st = st.filter('lowpass', freq = 25.0)
 
     data = st[0].data[0:npts]
-    data_plot = data*10e8+d
+    data = norm(data)
+    data_plot = [i/5+d for i in data]
     p1.plot(t_scale, data_plot, lw=0.5, color='black')
 plt.show()

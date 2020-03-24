@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-a = np.loadtxt("/home/zhangh/MyProject/FreqJ/FJ/result0.mat", delimiter=",")
+a = np.loadtxt("/home/zhangh/MyProject/FreqJ/FJ/result_test.mat", delimiter=",")
 
 c_min, c_max = 150, 600
-delta, npts = 0.0125, 2048
-f_min, f_max = 1/(npts*delta), 25
+delta, npts = 0.01, 800
+f_min, f_max = 1/(npts*delta), 1
 extent = [f_min, f_max, c_min, c_max]
 
 for i in range(len(a)):

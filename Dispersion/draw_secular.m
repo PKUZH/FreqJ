@@ -1,4 +1,4 @@
-load layer.mat
+load layer1.mat
 layer_z = layer(:, 1);%m
 layer_rou = layer(:, 2);%kg/m^3
 layer_alpha = layer(:, 3);%m/s
@@ -8,8 +8,8 @@ layer_mu = layer_beta.^2.*layer_rou;
 
 layer_num = size(layer, 1);
 
-f = 10; % Hz
-[cmin, cmax, dc] = deal(150, 600, 0.2); % m/s
+f = 1; % Hz
+[cmin, cmax, dc] = deal(2800, 4800, 1); % m/s
 c = cmin-dc/2:dc:cmax+dc/2; % to avoid singular at media's beta
 dets = ones(layer_num, size(c, 2));
 
