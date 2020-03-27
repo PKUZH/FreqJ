@@ -70,7 +70,6 @@ for i in range(gf_num):
     st = read_sac(i+1)
     data = st[0].data
     data = data[0:npts]
-#    data = norm(data)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]
 

@@ -6,6 +6,7 @@ import multiprocessing
 from scipy.special import jn
 from scipy.integrate import *
 import sys
+import norm
 
 
 # function B is the integral of J0
@@ -43,9 +44,9 @@ gf_path = '/home/zhangh/Data/GFs/model_deep/gzz'
 os.chdir(gf_path)
 
 gf_num, delta, npts = 200, 0.1, 4096
-c_min, c_max, dc = 3.1, 4.7, 0.001
+c_min, c_max, dc = 3.1, 4.7, 0.01
 r_min, r_max, dr = 5, 1000, 5
-f_min, f_max, df = 1/(npts*delta), 1, 1/(npts*delta)
+f_min, f_max, df = 1/(npts*delta), 0.5, 1/(npts*delta)
 c_scale = np.linspace(c_min, c_max, int((c_max-c_min)/dc)+1)
 r_scale = np.linspace(r_min, r_max, int((r_max-r_min)/dr)+1)
 f_scale = np.linspace(f_min, f_max, int((f_max-f_min)/df)+1)
@@ -58,6 +59,11 @@ for i in range(gf_num):
     st = read_sac(i+1)
     data = st[0].data
     data = data[0:npts]
+    dist = dr*(i+1)
+    c_b, c_e = c_min, c_max
+    win_b, win_e =int(dist/(c_e*delta)), int(dist/(c_b*delta))
+    #data = norm.norm_mean(data, win_b, win_e, 50)
+    data = norm.norm_win(data, win_b, win_e)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]
 
@@ -73,7 +79,7 @@ def func(params):
 
 # multiple processing
 param_list = list(itertools.product(range(nf), c_scale, [f_scale], [G_rw], [r_scale]))
-pool = multiprocessing.Pool(processes=30)
+pool = multiprocessing.Pool(processes=40)
 cnt = 0
 for y in pool.imap(func, param_list):
     i = int(cnt/nc)
