@@ -62,7 +62,7 @@ for i in range(gf_num):
     dist = dr*(i+1)
     c_b, c_e = c_min, c_max
     win_b, win_e =int(dist/(c_e*delta)), int(dist/(c_b*delta))
-    #data = norm.norm_mean(data, win_b, win_e, 50)
+    # data = norm.norm_mean(data, win_b, win_e, 50)
     data = norm.norm_win(data, win_b, win_e)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]
@@ -82,8 +82,8 @@ param_list = list(itertools.product(range(nf), c_scale, [f_scale], [G_rw], [r_sc
 pool = multiprocessing.Pool(processes=40)
 cnt = 0
 for y in pool.imap(func, param_list):
-    i = int(cnt/nc)
-    j = int(cnt%nc)
+    i = int(cnt / nc)
+    j = int(cnt % nc)
     I_wc[i][j] = y
     cnt = cnt+1
     sys.stdout.write('done %d/%d\r' % (cnt, len(param_list)))
