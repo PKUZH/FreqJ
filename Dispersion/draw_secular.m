@@ -1,4 +1,4 @@
-load layer1.mat
+load layer_deep.mat
 layer_z = layer(:, 1);%m
 layer_rou = layer(:, 2);%kg/m^3
 layer_alpha = layer(:, 3);%m/s
