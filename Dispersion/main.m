@@ -1,4 +1,4 @@
-load layer_deep.mat
+load layer_shallow.mat
 layer_z = layer(:,1);%m
 layer_rou = layer(:,2);%kg/m^3
 layer_alpha = layer(:,3);%m/s
@@ -7,8 +7,8 @@ layer_beta = layer(:,4);%m/s
 layer_mu = layer_beta.^2.*layer_rou;
 
 err = 0.0001;
-f = 0.001:0.001:1;
-c = [3200,4700,0.2];
+f = 0.025:0.025:25;
+c = [170,600,0.1];
 dc = c(3);
 
 fsa = [];
@@ -38,4 +38,4 @@ for j = 1:size(f,2)
     disp(j)
 end
 plot(fsa,vsa,'*')
-save result_deep.mat fsa vsa
+save result_shallow.mat fsa vsa

@@ -6,18 +6,7 @@ import multiprocessing
 from scipy.special import jn
 from scipy.integrate import *
 import sys
-
-'''
-def norm(data):
-    for i in range(len(data)):
-        if data[i]>0:
-            data[i] = 1
-        elif data[i]<0:
-            data[i] = -1
-        else:
-            data[i] = 0
-    return data
-'''
+import norm
 
 
 # function B is the integral of J0
@@ -37,7 +26,7 @@ def calculate_i(w, c, g_rw, r):
         rl = r[i]
         ru = r[i+1]
         b = (g_rw[i+1]-g_rw[i])/d_r
-        i_result += (ru*jn(0, k*ru)-rl*jn(0, k*rl))/k**2 - b_int(k*rl, k*ru)*b/k**3
+        i_result += b*(ru*jn(0, k*ru)-rl*jn(0, k*rl))/k**2 - b_int(k*rl, k*ru)*b/k**3
     return i_result
 
 
@@ -53,10 +42,12 @@ def read_sac(gf_index):
 gf_path = '/home/zhangh/Data/GFs/model_shallow/gzz'
 os.chdir(gf_path)
 
+# number of green functions, delta t & npts
 gf_num, delta, npts = 500, 0.01, 800
 c_min, c_max, dc = 150, 600, 0.2
-r_min, r_max, dr = 1, 500, 1 
+r_min, r_max, dr = 1, 100, 1 
 f_min, f_max, df = 1/(npts*delta), 25, 1/(npts*delta)
+
 c_scale = np.linspace(c_min, c_max, int((c_max-c_min)/dc)+1)
 r_scale = np.linspace(r_min, r_max, int((r_max-r_min)/dr)+1)
 f_scale = np.linspace(f_min, f_max, int((f_max-f_min)/df)+1)
@@ -69,6 +60,8 @@ for i in range(gf_num):
     st = read_sac(i+1)
     data = st[0].data
     data = data[0:npts]
+    # normlize method
+    # data = norm.norm_one(data)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]
 
@@ -93,4 +86,5 @@ for y in pool.imap(func, param_list):
     cnt = cnt+1
     sys.stdout.write('done %d/%d\r' % (cnt, len(param_list)))
 
-np.savetxt("/home/zhangh/MyProject/FreqJ/FJ/result_test.mat", I_wc, fmt="%.5e", delimiter=",")
+
+np.savetxt("/home/zhangh/MyProject/FreqJ/FJ/result_shallow.mat", I_wc, fmt="%.5e", delimiter=",")

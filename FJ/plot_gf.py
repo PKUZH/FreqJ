@@ -14,14 +14,14 @@ def norm(data):
     return data
 
 
-gf_path = 'home/zhangh/Data/GFs/model2'
+gf_path = '/home/zhangh/Data/GFs/model_shallow/gzz'
 os.chdir(gf_path)
 
-npts = 4000
-delta = 0.0125
+npts = 512
+delta = 0.01
 t_scale = [i*delta for i in list(range(npts))]
 p1 = plt.subplot(111)
-for i in range(110, 121):
+for i in range(10,500,20):
     d = i+1
     if d < 10:
         st = read('fz.tz_000'+str(d)+'.SAC')
@@ -33,7 +33,9 @@ for i in range(110, 121):
     # st = st.filter('lowpass', freq = 25.0)
 
     data = st[0].data[0:npts]
-    data = norm(data)
-    data_plot = [i/5+d for i in data]
-    p1.plot(t_scale, data_plot, lw=0.5, color='black')
+    # data = norm(data)
+    data_plot = [i*10e9+d for i in data]
+    p1.plot(t_scale, data_plot, lw=1, color='black')
+plt.xlabel('Time/s',size = 15)
+plt.ylabel('Distance/m',size = 15)
 plt.show()
