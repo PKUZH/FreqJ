@@ -4,9 +4,9 @@ import numpy as np
 def norm_mean(data, win_b, win_e, norm_win):
     d_abs = [abs(i) for i in data[win_b:win_e]]
     for i in range(win_b, win_e):
-        mean_d = np.mean(d_abs[int(max(i - win_b - norm_win, 0)): \
-                               int(min(i - win_b + norm_win, win_e - win_b))])
-        data[i] = data[i] / mean_d
+        mean_d = np.mean(d_abs[int(max(i-win_b-norm_win, 0)): \
+        int(min(i-win_b+norm_win, win_e-win_b))])
+        data[i] = data[i]/mean_d
     return data
 
 

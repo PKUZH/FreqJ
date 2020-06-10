@@ -25,7 +25,7 @@ def calculate_i(w, c, g_rw, r, dr):
         rl = r[i]
         ru = r[i+1]
         b = (g_rw[i+1]-g_rw[i])/dr[i]
-        i_result += b*(ru*jn(0, k*ru)-rl*jn(0, k*rl))/k**2-b*b_int(k*rl,k*ru)/k**3
+        i_result += b*(ru*jn(0, k*ru)-rl*jn(0, k*rl))/k**2-b*b_int(k*rl, k*ru)/k**3
     return i_result
 
 
@@ -38,25 +38,25 @@ nf, nc = len(f_scale), len(c_scale)
 I_wc = np.zeros((nf, nc))
 
 # read sac file
-sacfile_list = open('get_dist/dist_s.dat')
+sac_file_list = open('get_dist/dist_s.dat')
 r_scale, st1s, st2s = [], [], []
 gf_num = 0
-sacfile = sacfile_list.readline()
-while sacfile:
+sac_file = sac_file_list.readline()
+while sac_file:
     if gf_num == 0:
-        r_scale.append(float(sacfile.split()[0]))
-        st1s.append(sacfile.split()[1])
-        st2s.append(sacfile.split()[2])
+        r_scale.append(float(sac_file.split()[0]))
+        st1s.append(sac_file.split()[1])
+        st2s.append(sac_file.split()[2])
         gf_num = gf_num + 1
     else:
-        dist = float(sacfile.split()[0])
+        dist = float(sac_file.split()[0])
         if dist - r_scale[-1] > 0.01:
             r_scale.append(dist)
-            st1s.append(sacfile.split()[1])
-            st2s.append(sacfile.split()[2])
+            st1s.append(sac_file.split()[1])
+            st2s.append(sac_file.split()[2])
             gf_num = gf_num + 1
-    sacfile = sacfile_list.readline()
-sacfile_list.close()
+    sac_file = sac_file_list.readline()
+sac_file_list.close()
 
 gf_path = '/home/zhangh/Data/cor_pws'
 os.chdir(gf_path)
@@ -70,7 +70,7 @@ for i in range(gf_num):
     data = data[1501:1501+npts]
     dist = r_scale[i]
     c_b, c_e = c_min, c_max
-    win_b, win_e =int(dist/(c_e*delta)), int(dist/(c_b*delta))
+    win_b, win_e = int(dist/(c_e*delta)), int(dist/(c_b*delta))
     # data = norm.norm_win(data,win_b,win_e)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]

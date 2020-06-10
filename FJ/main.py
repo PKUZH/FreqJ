@@ -60,7 +60,7 @@ for i in range(gf_num):
     st = read_sac(i+1)
     data = st[0].data
     data = data[0:npts]
-    # normlize method
+    # normalize method
     # data = norm.norm_one(data)
     g_f = np.imag(np.fft.rfft(data))/npts
     G_rw[i] = g_f[1:nf+1]
@@ -80,8 +80,8 @@ param_list = list(itertools.product(range(nf), c_scale, [f_scale], [G_rw], [r_sc
 pool = multiprocessing.Pool(processes=30)
 cnt = 0
 for y in pool.imap(func, param_list):
-    i = int(cnt/nc)
-    j = int(cnt%nc)
+    i = int(cnt / nc)
+    j = int(cnt % nc)
     I_wc[i][j] = y
     cnt = cnt+1
     sys.stdout.write('done %d/%d\r' % (cnt, len(param_list)))

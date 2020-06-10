@@ -14,7 +14,7 @@ for i in range(len(a)):
             a[i][j] = 0
         else:
             a[i][j] = -a[i][j]
-    if np.max(a[i])>0:
+    if np.max(a[i]) > 0:
         a[i] = a[i]/np.max(a[i])
 
 plt.imshow(a.T, extent=extent, aspect='auto', origin='lower')
